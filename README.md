@@ -1,6 +1,6 @@
 # Cyber-Range-Mentorship-Program
 
-# Official [Cyber Range](http://joshmadakor.tech/cyber-range) Project
+#  Complete Vulnerability Management Project
 
 # Vulnerability Management Program Implementation
 

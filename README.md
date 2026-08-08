@@ -223,9 +223,91 @@ The server team received remediation scripts and scan reports to address key vul
 
 The server team reviewed vulnerability scan results, identifying outdated software, insecure accounts, and deprecated protocols. The remediation packages were prepared for submission to the Change Control Board (CAB). 
 
-<a href="https://www.youtube.com/watch?v=JqIxiWwDDkA" target="_"><img width="600" src="https://github.com/user-attachments/assets/03027c66-5f7c-42d0-b6dd-09d053c040b1"/></a>
+### Divine
 
-[Meeting Video](https://www.youtube.com/watch?v=JqIxiWwDDkA)
+Morning, Jimmy. How are you doing?
+
+### Jimmy
+
+Not bad for a Monday. And yourself?
+
+### Divine
+
+I'm still alive, so I can't complain.
+
+But before we get into the vulnerabilities, how did the actual scan go on your end? Did you have any outages, overutilization, or anything?
+
+### Jimmy
+
+The scan went well. We were monitoring the servers, and aside from all the open connections, we would have never known a scan was taking place.
+
+### Divine
+
+Yeah, that's good news. I kind of expected that much. We can keep monitoring going forward, but I don't expect we'll have any issues with resource utilization.
+
+Do you mind if I dive into the vulnerability findings?
+
+### Jimmy
+
+Yeah, absolutely.
+
+### Divine
+
+Cool. I'm going to share my screen really quick.
+
+So basically, the majority of these vulnerabilities come from Wireshark being installed. You can see all these Wireshark findings because it's just super outdated. That's all.
+
+One interesting thing I did find is that the local guest account on the servers actually belongs to a group. I looked deeper, and it belongs to the local Administrators group. I'm not sure why that is.
+
+Also, some of these might be automatically resolved by Windows updates, like this Microsoft Edge Chromium vulnerability and this one as well. They could be resolved by Windows updates, but I'm not really sure.
+
+We don't have to worry about the self-signed certificate issue because it's just the computer's self-signed certificate.
+
+However, these medium-strength cipher suites and TLS 1.1 and 1.0 are deprecated cipher suites and protocols. I think we should take some time to remediate these.
+
+So basically, we're looking at uninstalling Wireshark, disabling the deprecated protocols and cipher suites, and removing the guest account from the local Administrators group.
+
+### Jimmy
+
+Very interesting. The good news is I suspect most of our servers are going to have the same vulnerabilities. Hopefully, that makes things easier during remediation.
+
+### Divine
+
+Yeah, that's actually good news—a uniform loadout.
+
+Do you foresee any issues with remediating any of these, specifically the cipher suites and the insecure protocols?
+
+### Jimmy
+
+I highly doubt there will be any issues. We'll run it through the next Change Control Board.
+
+Uninstalling Wireshark and fixing the guest account shouldn't be an issue. Those aren't supposed to be on the servers anyway. I'll have to talk to our CIS admins about that.
+
+### Divine
+
+Yeah, that's good news. I'll go ahead and get started on building out some remediation packages for you to make your life easier when it comes time to fix them.
+
+### Jimmy
+
+Yeah, that sounds great.
+
+Oh, I wanted to ask: do you have anything in place to actually fix the Windows Update-related vulnerabilities? Do you have patch management already?
+
+### Divine
+
+Yes. I'm not actually worried about that. Windows Update should be handled automatically by next week. We have patch management in place.
+
+### Jimmy
+
+Okay, excellent. All right, I'll get started on researching the best way to remediate these findings, and I'll get back to you before the next Change Control Board.
+
+### Divine
+
+Sounds good. Talk to you soon.
+
+### Jimmy
+
+Talk to you soon.
 
 ---
 
@@ -233,9 +315,63 @@ The server team reviewed vulnerability scan results, identifying outdated softwa
 
 The Change Control Board (CAB) reviewed and approved the plan to remove insecure protocols and cipher suites. The plan included a rollback script and a tiered deployment approach.  
 
-<a href="https://www.youtube.com/watch?v=enqOjUV0-7k" target="_"><img width="600" src="https://github.com/user-attachments/assets/07164e63-fbce-471a-b469-29a6d41b7bb8"/></a>
+### Meeting Chair
 
-[Meeting Video](https://www.youtube.com/watch?v=enqOjUV0-7k)
+Okay, next up on the list are a couple of vulnerability remediations for the server team.
+
+Number one: removal of insecure protocols.
+
+Number two: removal of insecure cipher suites.
+
+It looks like Divine from the Risk Department is working in conjunction with Jimmy from Infrastructure on this.
+
+Jimmy, do you want to walk us through the technical aspects of the change being implemented?
+
+### Jimmy
+
+Normally, I would, but do you mind giving this one to Divine? He actually built the solution for us. We're still getting used to the process.
+
+### Divine
+
+Yeah, I can explain these.
+
+Basically, the existence of insecure cipher suites and protocols on the system means that the system is capable of negotiating and using some kind of algorithm or protocol that's been deprecated.
+
+If it connects to a server and the server only wants to use those protocols, it's possible that the computer will use them. These settings are controlled by the Windows Registry.
+
+It's a really simple fix. We wrote a PowerShell script that goes through and disables all the insecure protocols and ciphers, and then enables the ones that are standardized or that meet today's security standards.
+
+So it's really straightforward.
+
+### Meeting Chair
+
+Yeah, that sounds good. But what if something goes wrong? Do we have a rollback plan in place? Did you even think about that?
+
+### Divine
+
+Yes, absolutely.
+
+First of all, we're going to do a tiered deployment. This means we'll start with a pilot group, which is a really small group of computers, followed by pre-production, and then finally production, where it will be deployed everywhere.
+
+On top of this, we have a fully built and tested automated rollback script for each remediation.
+
+The script will restore the original protocols and ciphers should there be any unknown issues that come up.
+
+### Meeting Chair
+
+That sounds good. I guess I noticed the fixes are simple Registry updates, so I'm not too concerned, I suppose.
+
+### Divine
+
+Yep, exactly. Any more questions from anybody?
+
+### Meeting Chair
+
+Great. That wraps things up for this week's CAP meeting. See you all next week.
+
+### Divine
+
+See you later.
 
 ---
 ### Step 10 ) Remediation Effort

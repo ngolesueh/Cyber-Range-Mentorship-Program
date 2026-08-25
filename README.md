@@ -4,9 +4,9 @@ Documenting my hands-on journey through the Cyber Range Mentorship Program — r
 
 ## About
 
-This repository is a portfolio of the projects I've completed during the program. It's organized as a numbered skill-building sequence: each project builds the specific vulnerability-management skills (unauthenticated vs. authenticated scanning, scan templates, compliance auditing, agent-based monitoring) that come together in the final capstone project, where those skills are applied to stand up a complete vulnerability management program.
+This repository is a portfolio of the projects I've completed during the program, organized into tracks. The **Vulnerability Management** track is a numbered skill-building sequence: each project builds the specific vulnerability-management skills (unauthenticated vs. authenticated scanning, scan templates, compliance auditing, agent-based monitoring) that come together in the final capstone project, where those skills are applied to stand up a complete vulnerability management program. The **Log Analysis & Detection** track is a separate skill line focused on onboarding endpoints for telemetry collection and querying that telemetry with KQL to investigate activity.
 
-## Projects
+## Vulnerability Management Track
 
 | # | Project | Description | Skills / Tools |
 |---|---|---|---|
@@ -18,7 +18,7 @@ This repository is a portfolio of the projects I've completed during the program
 | 6 | [Agent-Based Monitoring](./projects/06-agent-based-monitoring/README.md) | Deploying a Tenable/Nessus agent for continuous, network-independent endpoint monitoring. | Tenable, Azure VMs |
 | 🏁 | [Vulnerability Management Program Implementation (Capstone)](./Vulnerability-Management-Project.md) | End-to-end simulation of standing up a vulnerability management program — from drafting policy and securing stakeholder buy-in, through scanning, prioritization, and a full remediation cycle that cut vulnerabilities by 81%. | Tenable, Azure VMs, Nessus, PowerShell, BASH |
 
-## Skills Demonstrated
+### Skills Demonstrated
 
 - Unauthenticated and authenticated vulnerability scanning across Windows and Linux
 - Scan template creation and compliance auditing (DISA STIG)
@@ -28,6 +28,20 @@ This repository is a portfolio of the projects I've completed during the program
 - Change Control Board (CAB) process and rollback planning
 - Scripting for remediation (PowerShell, BASH)
 - Reporting on program outcomes and metrics
+
+## Log Analysis & Detection Track
+
+| # | Project | Description | Skills / Tools |
+|---|---|---|---|
+| 7 | [Log Analysis on Azure Using Microsoft Defender for Endpoint](./projects/07-log-analysis-mde-azure/README.md) | Onboarded a Windows 11 Azure VM to Microsoft Defender for Endpoint and used KQL across six device-telemetry use cases (logon, process, network, file, registry, and scheduled-task events) to investigate endpoint activity. | Microsoft Defender for Endpoint, Microsoft Sentinel, Microsoft Azure, KQL |
+
+### Skills Demonstrated
+
+- Endpoint onboarding to Microsoft Defender for Endpoint
+- KQL query authoring and debugging (Advanced Hunting)
+- Cross-table log investigation (logon, process, network, file, registry, and scheduled-task events)
+- Distinguishing investigation-relevant activity from legitimate background noise
+- Understanding of Defender/Sentinel integration and the broader Microsoft Azure SOC log flow
 
 ## About Me
 

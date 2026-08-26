@@ -21,13 +21,13 @@ Perform an unauthenticated (black-box) vulnerability scan against a Windows 11 P
 2. Log into the VM.
 3. Disable the Windows Firewall for the Domain, Private, and Public profiles. (If I had created and attached a Network Security Group (NSG) to the VM, I would have made sure to add a rule allowing all inbound traffic from the Tenable Scan Engine by including its IP address in the rule. I used the VM's private IP address because the scanner and VM are in the same network environment — if they were on separate networks, I would have used the VM's public IP address instead.)
 
-![Azure VM interface](./screenshots/01-azure-vm-interface.png)
+![Azure VM interface](./screenshots/01-azure-vm-interface.jpg)
 
-![VM deployment status](./screenshots/02-vm-deployment-status.png)
+![VM deployment status](./screenshots/02-vm-deployment-status.jpg)
 
-![Logging into the VM](./screenshots/03-login-into-vm.png)
+![Logging into the VM](./screenshots/03-login-into-vm.jpg)
 
-![Disabling the Windows Firewall](./screenshots/04-disabling-firewall.png)
+![Disabling the Windows Firewall](./screenshots/04-disabling-firewall.jpg)
 
 ## Phase 2: Tenable Scan Configuration & Results
 
@@ -37,11 +37,11 @@ Perform an unauthenticated (black-box) vulnerability scan against a Windows 11 P
 4. Under Discovery, select the custom scan type, activate Ping the Remote Host, and activate Use Fast Network Discovery. No credentials are added for this scan.
 5. Save & Launch.
 
-![Tenable login page](./screenshots/05-tenable-login.png)
+![Tenable login page](./screenshots/05-tenable-login.jpg)
 
-![Basic Network Scan configuration](./screenshots/06-scan-config.png)
+![Basic Network Scan configuration](./screenshots/06-scan-config.jpg)
 
-![Unauthenticated scan results](./screenshots/07-scan-results.png)
+![Unauthenticated scan results](./screenshots/07-scan-results.jpg)
 
 ## Observations
 

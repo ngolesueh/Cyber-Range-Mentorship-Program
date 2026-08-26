@@ -129,7 +129,7 @@ DeviceProcessEvents
 | where Timestamp > ago(45m)
 | where FileName in~ ("cmd.exe", "whoami.exe", "powershell.exe")
 | project Timestamp, FileName, ProcessCommandLine,
-          InitiatingProcessFileName, InitiatingProcessParentFileName, AccountName
+InitiatingProcessFileName, InitiatingProcessParentFileName, AccountName
 | sort by Timestamp desc
 ```
 
@@ -167,7 +167,7 @@ DeviceNetworkEvents
 | where Timestamp > ago(45m)
 | where InitiatingProcessFileName == "powershell.exe"
 | project Timestamp, ActionType, RemoteIP, RemotePort, RemoteUrl,
-          InitiatingProcessFileName
+InitiatingProcessFileName
 | sort by Timestamp desc
 ```
 
@@ -206,7 +206,7 @@ DeviceFileEvents
 | where FolderPath has @"\Temp\"
 | where FileName startswith "labtest"
 | project Timestamp, ActionType, FileName, FolderPath, SHA256,
-          InitiatingProcessFileName
+InitiatingProcessFileName
 | sort by Timestamp desc
 ```
 
@@ -240,7 +240,7 @@ DeviceRegistryEvents
 | where RegistryKey has @"\CurrentVersion\Run"
 | where ActionType in ("RegistryValueSet", "RegistryKeyCreated")
 | project Timestamp, ActionType, RegistryValueName, RegistryValueData,
-          InitiatingProcessFileName
+InitiatingProcessFileName
 | sort by Timestamp desc
 ```
 
@@ -276,13 +276,66 @@ DeviceEvents
 | where Timestamp > ago(30m)
 | where ActionType == "ScheduledTaskCreated"
 | project Timestamp, ActionType, AdditionalFields,
-          InitiatingProcessFileName, InitiatingProcessAccountName
+InitiatingProcessFileName, InitiatingProcessAccountName
 | sort by Timestamp desc
 ```
 
 **Expect:** A `ScheduledTaskCreated` row with the task name (`LabUpdaterTask`) inside the `AdditionalFields` JSON, initiated by `schtasks.exe` under the logged-in account. The same `schtasks` command also lands in `DeviceProcessEvents` — a good example of one action getting recorded two different ways, from two different vantage points.
 
 ![Creating and deleting the scheduled task](./screenshots/52-scheduled-task-create-delete.png)
+
+---
+
+## Phase 3: Triage — Isolating a Device and Collecting an Investigation Package
+
+Onboarding a device and querying its logs answers "what happened." The other half of the job is knowing what to *do* about it once something suspicious turns up — contain the device before it can do more damage, and preserve the evidence needed to investigate it properly. MDE puts both actions directly on the device page.
+
+![MDE device actions menu — Isolate Device and Collect Investigation Package](./screenshots/53-actions-menu-isolate-investigate.png)
+
+### Isolating a Device from the Network
+
+**Goal:** Simulate responding to a suspected compromise by cutting the device off from the network while keeping it reachable to Defender for continued investigation — confirm the isolation actually took effect, then reverse it once satisfied.
+
+**Task:**
+1. On the VM, disable Windows Firewall (`wf.msc`) and set the VM's NSG to allow all inbound traffic (or at minimum ICMP), so a successful isolation can only be attributed to MDE and not to some other control already blocking traffic.
+2. Start a continuous ping to the VM's public IP from an external machine, to use as a live indicator of network reachability.
+3. In the MDE portal, go to **Assets → Devices**, search for and select the device, then use the **⋯** menu to click **Isolate Device**, add a comment explaining the reason, and confirm.
+
+![Baseline: the VM answering ping before isolation](./screenshots/54-isolation-ping-baseline.png)
+![Isolate Device confirmation dialog with justification comment](./screenshots/55-isolation-confirm-dialog.png)
+
+**Result:** Within moments of confirming, the ping starts failing (`Request timed out`) and keeps failing for as long as the device stays isolated. MDE has cut the device off from the rest of the network while keeping its own management channel open — the whole point of isolation is that the analyst retains visibility into the device (and can still run response actions on it) while everything else is blocked.
+
+![Ping timing out immediately after isolation](./screenshots/56-isolation-ping-stopped.png)
+![Ping continuing to time out for the duration of the isolation](./screenshots/57-isolation-ping-continued.png)
+
+4. Once satisfied — in this case, because the exercise was simulated and there was nothing further to contain — release the device from isolation via the same **⋯** menu.
+
+**Result:** Ping replies resume immediately, confirming the device is back on the network.
+
+![Ping replies resuming after release from isolation](./screenshots/58-isolation-ping-restored.png)
+
+### Creating an Investigation Package
+
+**Goal:** Collect a forensic snapshot of the device — running processes, autoruns, scheduled tasks, network connections, and other volatile artifacts — for offline review, without needing to be logged into the device itself.
+
+**Task:**
+1. On the VM's desktop, create a folder with a couple of arbitrary files in it (`corporate_report.txt`, `corporate_earnings.txt`) as identifiable contents to look for once the package is unzipped.
+2. In the MDE portal (`security.microsoft.com`), go to **Assets → Devices**, search for and select the device, then use the **⋯** menu to click **Collect Investigation Package**, enter a comment describing the reason for the collection (visible to other analysts on the tenant), and confirm.
+
+![Collect Investigation Package dialog, before entering a comment](./screenshots/59-investigation-package-dialog-empty.png)
+![Collect Investigation Package dialog with the reason for collection entered](./screenshots/60-investigation-package-dialog-comment.png)
+
+3. From the **⋯** menu, open **Action Center** to track the collection job's status.
+4. Refresh periodically until the collection completes, then download and unzip the package to review its contents.
+
+**Result:** The Action Center confirms the package collection finished and is available to download, alongside a record of the isolation/release actions taken earlier in the same session — a single timestamped audit trail of every response action performed on the device.
+
+![Action Center showing the completed investigation package and isolation history](./screenshots/61-investigation-package-action-center.png)
+
+### Why This Matters
+
+Detection tells an analyst *that* something happened; isolation and evidence collection are what turn a detection into a controlled incident response. Isolating a device stops lateral movement and further damage the moment a compromise is suspected, without requiring a device to be physically pulled offline — it stays remotely manageable through MDE even while everything else is blocked. The investigation package captures volatile, time-sensitive artifacts that can disappear the moment a device reboots or an attacker cleans up after themselves, preserving them for deeper forensic review regardless of what the initial triage finds. And critically, isolation is reversible: if the investigation turns up nothing malicious, the device is released back onto the network with a full audit trail of what was checked and why — no need to wipe or rebuild a machine on suspicion alone. Together, these two actions are the difference between spotting a threat and actually containing one.
 
 ---
 
@@ -293,6 +346,8 @@ DeviceEvents
 - KQL is case-sensitive on column names, and its error messages (syntax vs. semantic, with the exact token/line/position) are precise enough to debug from directly rather than guessing.
 - Background noise is real: a live Windows VM writes to common attacker-relevant locations (like the Run key) on its own, so filtering has to be specific enough to isolate the activity under investigation.
 - `DeviceEvents` is the catch-all for sensor activity that doesn't have its own dedicated table, and the same underlying action (e.g., a `schtasks` command) can show up in more than one table from different angles.
+- Isolating a device is not the same as shutting it down — MDE keeps its own management channel open during isolation, so the analyst can keep investigating (and later release) a device that's otherwise cut off from the rest of the network.
+- An investigation package captures volatile evidence (running processes, autoruns, network state) that would otherwise be lost to a reboot or attacker cleanup, and every isolation and collection action is logged in the Action Center with a timestamp and the analyst's stated justification.
 
 ---
 

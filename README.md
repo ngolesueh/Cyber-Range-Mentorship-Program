@@ -33,7 +33,7 @@ This repository is a portfolio of the projects I've completed during the program
 
 | # | Project | Description | Skills / Tools |
 |---|---|---|---|
-| 7 | [Log Analysis on Azure Using Microsoft Defender for Endpoint](./projects/07-log-analysis-mde-azure/README.md) | Onboarded a Windows 11 Azure VM to Microsoft Defender for Endpoint and used KQL across six device-telemetry use cases (logon, process, network, file, registry, and scheduled-task events) to investigate endpoint activity. | Microsoft Defender for Endpoint, Microsoft Sentinel, Microsoft Azure, KQL |
+| 7 | [Log Analysis on Azure Using Microsoft Defender for Endpoint](./projects/07-log-analysis-mde-azure/README.md) | Onboarded a Windows 11 Azure VM to Microsoft Defender for Endpoint, used KQL across six device-telemetry use cases to investigate endpoint activity, then isolated the device from the network and collected a forensic investigation package to simulate full triage of a suspected compromise. | Microsoft Defender for Endpoint, Microsoft Sentinel, Microsoft Azure, KQL |
 
 ### Skills Demonstrated
 
@@ -42,6 +42,8 @@ This repository is a portfolio of the projects I've completed during the program
 - Cross-table log investigation (logon, process, network, file, registry, and scheduled-task events)
 - Distinguishing investigation-relevant activity from legitimate background noise
 - Understanding of Defender/Sentinel integration and the broader Microsoft Azure SOC log flow
+- Device isolation for network containment of a suspected compromised endpoint, with reversible release once cleared
+- Forensic evidence collection via MDE Investigation Packages, with response actions tracked through the Action Center
 
 ## About Me
 

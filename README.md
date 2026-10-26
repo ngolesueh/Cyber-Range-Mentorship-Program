@@ -4,7 +4,7 @@ Documenting my hands-on journey through the Cyber Range Mentorship Program — r
 
 ## About
 
-This repository is a portfolio of the projects I've completed during the program, organized into tracks. The **Vulnerability Management** track is a numbered skill-building sequence: each project builds the specific vulnerability-management skills (unauthenticated vs. authenticated scanning, scan templates, compliance auditing, agent-based monitoring) that come together in the final capstone project, where those skills are applied to stand up a complete vulnerability management program. The **Log Analysis & Detection** track is a separate skill line focused on onboarding endpoints for telemetry collection and querying that telemetry with KQL to investigate activity.
+This repository is a portfolio of the projects I've completed during the program, organized into tracks. The **Vulnerability Management** track is a numbered skill-building sequence: each project builds the specific vulnerability-management skills (unauthenticated vs. authenticated scanning, scan templates, compliance auditing, agent-based monitoring) that come together in the final capstone project, where those skills are applied to stand up a complete vulnerability management program. The **Log Analysis & Detection** track is a separate skill line focused on onboarding endpoints for telemetry collection and querying that telemetry with KQL to investigate activity. The **Threat Hunting** track applies those skills to full-scale hunts: reconstructing a real attack chain from raw telemetry, with no alert to start from, and reporting the findings to both technical and executive audiences.
 
 ## Vulnerability Management Track
 
@@ -44,6 +44,22 @@ This repository is a portfolio of the projects I've completed during the program
 - Understanding of Defender/Sentinel integration and the broader Microsoft Azure SOC log flow
 - Device isolation for network containment of a suspected compromised endpoint, with reversible release once cleared
 - Forensic evidence collection via MDE Investigation Packages, with response actions tracked through the Action Center
+
+## Threat Hunting Track
+
+| # | Project | Description | Skills / Tools |
+|---|---|---|---|
+| 8 | [Threat Hunt — TideGlass (Agentic LLM-Driven Data Theft)](./projects/08-threat-hunt-tideglass/README.md) | Reconstructed a 52-minute, AI-agent-driven intrusion from raw telemetry — from a marimo kernel RCE through IMDS credential theft, IP-rotating Secrets Manager enumeration, SSH lateral movement, and exfiltration of a 2.8M-row customer table. Solved 28/28 flags, mapped the chain to MITRE ATT&CK and ATLAS, and wrote both a technical incident report and a plain-language executive briefing. | Microsoft Sentinel, KQL, AWS CloudTrail, MITRE ATT&CK, MITRE ATLAS |
+
+### Skills Demonstrated
+
+- Hypothesis-driven threat hunting across application, host, cloud, database, and AI-agent telemetry
+- Cross-table KQL correlation to rebuild a full kill chain and timeline
+- Separating attacker activity from legitimate noise (process lineage, source-IP + secret pairing, account and destination comparison)
+- Cloud attack analysis: IMDS credential theft, Secrets Manager abuse, IP-rotation evasion
+- Attributing activity as human-driven vs. human-tasked autonomous (LLM agent) execution
+- MITRE ATT&CK and MITRE ATLAS mapping, IOC documentation, and telemetry-gap analysis
+- Incident reporting for both technical and executive audiences
 
 ## About Me
 

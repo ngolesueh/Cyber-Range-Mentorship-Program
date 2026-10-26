@@ -51,6 +51,7 @@ This repository is a portfolio of the projects I've completed during the program
 |---|---|---|---|
 | 8 | [Threat Hunt — TideGlass (Agentic LLM-Driven Data Theft)](./projects/08-threat-hunt-tideglass/README.md) | Reconstructed a 52-minute, AI-agent-driven intrusion from raw telemetry — from a marimo kernel RCE through IMDS credential theft, IP-rotating Secrets Manager enumeration, SSH lateral movement, and exfiltration of a 2.8M-row customer table. Solved 28/28 flags, mapped the chain to MITRE ATT&CK and ATLAS, and wrote both a technical incident report and a plain-language executive briefing. | Microsoft Sentinel, KQL, AWS CloudTrail, MITRE ATT&CK, MITRE ATLAS |
 | 9 | [Threat Hunt — Harborlight (Akira-Style Ransomware)](./projects/09-threat-hunt-harborlight/README.md) | Rebuilt a full-domain ransomware intrusion at a small dental practice from raw Sysmon and Windows Security logs, with no alert queue: phishing lure, UAC bypass, Print Spooler injection, LSASS and NTDS.dit credential theft, hub-and-spoke lateral movement, rclone exfiltration to MEGA, log clearing, a Domain Admin backdoor and `.akira` encryption, and proved the C2 was still active after encryption. Perfect score (46/46 flags, 4,190/4,190) on a Hard hunt, with technical and plain-language reports. | Microsoft Sentinel, KQL, Sysmon, Windows Security Logs, MITRE ATT&CK |
+| 10 | [Threat Hunt — Operation ECHOLEAK (Zero-Click Prompt Injection)](./projects/10-threat-hunt-operation-echoleak/README.md) | Investigated an EchoLeak-style (CVE-2025-32711) attack in which a poisoned email attachment hijacked Microsoft 365 Copilot through indirect prompt injection. Copilot searched SharePoint, read 13 confidential files across four departments, leaked its own system prompt, and exfiltrated data through zero-click markdown image URLs that endpoint monitoring could not see. Proved the hijack against an 86-session baseline, classified it as external input manipulation, and wrote three KQL detections. Perfect score (17/17 flags, 1,600/1,600), with technical and leadership reports. | Microsoft Sentinel, KQL, M365 Unified Audit Log, Copilot Audit, Entra ID, MITRE ATLAS |
 
 ### Skills Demonstrated
 
@@ -61,6 +62,7 @@ This repository is a portfolio of the projects I've completed during the program
 - Attributing activity as human-driven vs. human-tasked autonomous (LLM agent) execution
 - MITRE ATT&CK and MITRE ATLAS mapping, IOC documentation, and telemetry-gap analysis
 - Ransomware kill-chain reconstruction on Windows/Active Directory from Sysmon and Security events (injection, LSASS/NTDS dumping, WMI, log clearing, backdoor accounts)
+- AI-layer investigation: detecting indirect prompt injection and LLM data leakage in M365 Copilot audit logs
 - Incident reporting for both technical and executive audiences
 
 ## About Me

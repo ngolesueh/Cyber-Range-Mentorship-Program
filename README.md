@@ -50,6 +50,7 @@ This repository is a portfolio of the projects I've completed during the program
 | # | Project | Description | Skills / Tools |
 |---|---|---|---|
 | 8 | [Threat Hunt — TideGlass (Agentic LLM-Driven Data Theft)](./projects/08-threat-hunt-tideglass/README.md) | Reconstructed a 52-minute, AI-agent-driven intrusion from raw telemetry — from a marimo kernel RCE through IMDS credential theft, IP-rotating Secrets Manager enumeration, SSH lateral movement, and exfiltration of a 2.8M-row customer table. Solved 28/28 flags, mapped the chain to MITRE ATT&CK and ATLAS, and wrote both a technical incident report and a plain-language executive briefing. | Microsoft Sentinel, KQL, AWS CloudTrail, MITRE ATT&CK, MITRE ATLAS |
+| 9 | [Threat Hunt — Harborlight (Akira-Style Ransomware)](./projects/09-threat-hunt-harborlight/README.md) | Rebuilt a full-domain ransomware intrusion at a small dental practice from raw Sysmon and Windows Security logs, with no alert queue: phishing lure, UAC bypass, Print Spooler injection, LSASS and NTDS.dit credential theft, hub-and-spoke lateral movement, rclone exfiltration to MEGA, log clearing, a Domain Admin backdoor and `.akira` encryption, and proved the C2 was still active after encryption. Perfect score (46/46 flags, 4,190/4,190) on a Hard hunt, with technical and plain-language reports. | Microsoft Sentinel, KQL, Sysmon, Windows Security Logs, MITRE ATT&CK |
 
 ### Skills Demonstrated
 
@@ -59,6 +60,7 @@ This repository is a portfolio of the projects I've completed during the program
 - Cloud attack analysis: IMDS credential theft, Secrets Manager abuse, IP-rotation evasion
 - Attributing activity as human-driven vs. human-tasked autonomous (LLM agent) execution
 - MITRE ATT&CK and MITRE ATLAS mapping, IOC documentation, and telemetry-gap analysis
+- Ransomware kill-chain reconstruction on Windows/Active Directory from Sysmon and Security events (injection, LSASS/NTDS dumping, WMI, log clearing, backdoor accounts)
 - Incident reporting for both technical and executive audiences
 
 ## About Me
